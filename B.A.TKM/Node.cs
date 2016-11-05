@@ -5,7 +5,6 @@ namespace TKM_B_F_A
     class Node
     {
         public string[,][] connections;
-        public int line = 1;
         public string[] name;
 
         public Node(string[] ne, string[] cs, string wt)
@@ -14,16 +13,9 @@ namespace TKM_B_F_A
             Add(cs, wt);
         }
 
-        public Node(string[] ne, string[] cs, string wt, int le)
+        public Node(string[] ne)
         {
             name = ne;
-            line = le;
-            Add(cs, wt);
-        }
-        public Node(string[] ne, int le)
-        {
-            name = ne;
-            line = le;
         }
 
         public void Add(string[] cn, string wt)
@@ -46,8 +38,6 @@ namespace TKM_B_F_A
                             tech[i, j] = connections[i, j];
                         }
                     }
-                    //connections.CopyTo(tech, 0);
-
                     tech[tech.GetLength(0) - 1, 0] = cn;
                     tech[tech.GetLength(0) - 1, 1] = wt.ToCharArray().Select(c => c.ToString()).ToArray();
                     connections = tech;

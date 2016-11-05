@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 
 namespace TKM_B_F_A
@@ -7,56 +8,76 @@ namespace TKM_B_F_A
     class Program
     {
         static string[] names;
-        static string str;
         static void Main(string[] args)
         {
+            Console.CursorVisible = true;
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            //Console.WriteLine("Input names from variables");
-            //str = Console.ReadLine();
-            //names = str.Split(' ');
             names = new string[] { "x", "y", "z", "w" };
             Console.WriteLine("Input vector");
+            Console.WriteLine();
             string func = Console.ReadLine();
             int m = func.Length;
             int n = Convert.ToInt32(Math.Log(m, 2));
             Console.WriteLine();
-            Console.WriteLine(str + " f");
+            Console.WriteLine("Truth table");
+            Console.WriteLine();
             bool[,] vArr = VTable(func);
             OutputArray(vArr, m, n + 1);
-            Console.ReadKey();
-            Console.WriteLine("triangl");
+            // Console.ReadKey();
+            Console.WriteLine();
+            Console.WriteLine("Pascal's triangle");
             Console.WriteLine();
             string[] pol = GegalkinPolynom(vArr, n);
+            Console.WriteLine();
+            Console.WriteLine("Gegalkin Polynom");
+            Console.WriteLine();
             for (int i = 0; i < pol.Length; i++)
             {
-                Console.Write(pol[i] + "+");
+                if (i == pol.Length - 1)
+                {
+                    Console.Write(pol[i]);
+                }
+                else
+                {
+                    Console.Write(pol[i] + "+");
+                }
             }
             Console.WriteLine();
-            Console.WriteLine("derivatives");
             Console.WriteLine();
+            Console.WriteLine("Derivatives");
             string[,] stek = OrderVar(vArr, n);
-
+            Console.WriteLine("Variables priority");
             Console.WriteLine();
             for (int i = 0; i < n; i++)
             {
-                Console.Write(stek[i,0] + " ");
+                Console.Write(stek[i, 0] + " ");
             }
             Console.WriteLine();
-           
-           // stek =new string[] { "x","w","y","z"};
-            //OutputArray(d, m, n);
-            Console.ReadKey();
+            Console.WriteLine();
+            //Console.ReadKey();
             Shannon.Manager(pol, stek);
             Node[] fff = Shannon.ns.Data;
+            Console.WriteLine("Values at nodes(in contact circuit)");
+            Console.WriteLine();
             for (int i = 0; i < fff.Length; i++)
             {
                 for (int j = 0; j < fff[i].name.Length; j++)
                 {
-                    Console.Write(fff[i].name[j] + "+");
+                    if (j == fff[i].name.Length - 1)
+                    {
+                        Console.Write(fff[i].name[j]);
+                    }
+                    else
+                    {
+                        Console.Write(fff[i].name[j] + "+");
+                    }
                 }
                 Console.WriteLine();
             }
             string[,] res = Shannon.AdjMatrix(fff);
+            Console.WriteLine();
+            Console.WriteLine("Adjacency matrix");
+            Console.WriteLine();
             OutputArray(res);
             Console.ReadKey();
         }
@@ -112,7 +133,7 @@ namespace TKM_B_F_A
         }
         static void OutputArray(string[,] arr)
         {
-            int m = 0; int n=0;
+            int m = 0; int n = 0;
             m = arr.GetLength(0);
             n = arr.GetLength(1);
             for (int j = 0; j < m; j++)
@@ -131,7 +152,7 @@ namespace TKM_B_F_A
         /// <param name="vArr">таблица истинности функции</param>
         /// <param name="n">арность функции</param>
         /// <returns></returns>
-        static string[,] OrderVar(bool[,] vArr, int n) 
+        static string[,] OrderVar(bool[,] vArr, int n)
         {
             //n++;
             int m = Convert.ToInt32(Math.Pow(2, n));
@@ -175,13 +196,11 @@ namespace TKM_B_F_A
                 Console.WriteLine();
             }
 
-            string[,] res = new string[n,2];
+            string[,] res = new string[n, 2];
             int[] r = new int[n];
             for (int i = 0; i < n; i++)
             {
-               // res[i, 0] = names[i];
-               // res[i, 1] = p[i].ToString();
-                int v = -1; int k = 0; int k2 = 0;
+                int v = -1; int k = 0;
 
                 for (int j = 0; j < n; j++)
                 {
@@ -191,8 +210,8 @@ namespace TKM_B_F_A
                         k = j;
                     }
                 }
-                res[i,0] = names[k];
-                res[i,1] = p[k].ToString();
+                res[i, 0] = names[k];
+                res[i, 1] = p[k].ToString();
                 p[k] = 0;
 
             }
@@ -264,37 +283,7 @@ namespace TKM_B_F_A
                     }
                 }
             }
-            //string[] pol = new string[polynom.Length];
-            //for (int i = 0; i < polynom.Length; i++)
-            //{
-
-            //    if (polynom[i] == "1")
-            //    {
-            //        pol[0] = "1";
-            //        continue;
-            //    }
-            //    switch (polynom[i])
-            //    {
-            //        case "1":
-            //            pol[0] = "1";
-            //            break;
-            //        case "x":
-            //            pol[1] = "x";
-            //            break;
-            //        case "y":
-            //            pol[2] = "y";
-            //            break;
-            //        case "z":
-            //            pol[3] = "z";
-            //            break;
-            //        case "w":
-            //            pol[1] = "w";
-            //            break;
-            //    }
-            //}
-            
             return polynom;
         }
-
     }
 }
