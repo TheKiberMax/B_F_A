@@ -1,11 +1,19 @@
-﻿using System;
-using System.Linq;
-
-namespace TKM_B_F_A
+﻿namespace TKM_B_F_A
 {
+    /// <summary>
+    /// Реализация разложения Шеннона
+    /// </summary>
     static class Shannon
     {
         static public Nodes ns;
+        static public int index = 0;
+
+        #region =============== Methods =====================
+        /// <summary>
+        /// Метод реализующий разложение
+        /// </summary>
+        /// <param name="func">функция для разложения</param>
+        /// <param name="stek">очередность использования переменных</param>
         static public void Manager(string[] func, string[,] stek)
         {
             string[] f;
@@ -15,7 +23,7 @@ namespace TKM_B_F_A
             for (int i = 1; i < ns.Data.Length; i++)
             {
                 //берем значение в текущем узле
-                f = ns.Data[i].name;
+                f = ns.Data[i].Name;
                 //проверяем, что оно не одна переменная
                 if (f.Length == 1)
                 {
@@ -25,6 +33,7 @@ namespace TKM_B_F_A
                 else
                 {
                     //получаем узлы потомки и их связи
+                    index++;
                     string[,][] cn = Decomp(f, stek);
                     //проверяем, что первый(f0) не равен 0
                     for (int j = 0; j < 2; j++)
@@ -38,15 +47,20 @@ namespace TKM_B_F_A
                             //проверяем что это одна переменная
                             if (cn[j, 0].Length == 1 && cn[j, 0][0] != "1")
                             {
-
-                                //если это так то создаем узел связанный с конечным
-                                string[] ed = new string[1];
-                                ed[0] = "1";
-                                Node ne = new Node(cn[j, 0], ed, ParseToStr(cn[j, 0]));
-                                //добавляем в массив узлов
-                                ns.Add(ne);
-                                //добавляем связь конечному узлу
-                                ns.Data[0].Add(cn[j, 0], ParseToStr(cn[j, 0]));
+                                //проверям, существует ли уже такой узел
+                                int l = (ns.SearchIndex(cn[j, 0]));
+                                //если не существует
+                                if (l == -1)
+                                {
+                                    //если это так то создаем узел связанный с конечным
+                                    string[] ed = new string[1];
+                                    ed[0] = "1";
+                                    Node ne = new Node(cn[j, 0], ed, ParseToStr(cn[j, 0]));
+                                    //добавляем в массив узлов
+                                    ns.Add(ne);
+                                    //добавляем связь конечному узлу
+                                    ns.Data[0].Add(cn[j, 0], ParseToStr(cn[j, 0]));
+                                }
                             }
                             //проверям, существует ли уже такой узел
                             int k = (ns.SearchIndex(cn[j, 0]));
@@ -71,6 +85,12 @@ namespace TKM_B_F_A
             }
         }
 
+        /// <summary>
+        /// Разложение функции на две функции меньшей арности
+        /// </summary>
+        /// <param name="func">функция дл разложения</param>
+        /// <param name="stek">очередность использования переменных</param>
+        /// <returns>две функции меньшей арности с соответствующими значениями использованной переменной</returns>
         static string[,][] Decomp(string[] func, string[,] stek)
         {
             string[] f0; string[] f1; string v;
@@ -85,12 +105,18 @@ namespace TKM_B_F_A
             f1 = MinF(f1);
             string[,][] res = new string[2, 2][];
             res[0, 0] = f0;
-            res[0, 1] = ("-" + v).ToCharArray().Select(c => c.ToString()).ToArray();
+            res[0, 1] = new string[2] { "-", v };
             res[1, 0] = f1;
-            res[1, 1] = (v).ToCharArray().Select(c => c.ToString()).ToArray();
+            res[1, 1] = new string[1] { v };
             return res;
         }
 
+        /// <summary>
+        /// Выбор переменной для текущего этапа разложения
+        /// </summary>
+        /// <param name="func">функция для разложения</param>
+        /// <param name="stek">очередность использования переменных</param>
+        /// <returns>переменная для текущего этапа разложения / "0" если дальнейшее разложение невозможно</returns>
         static string CurVar(string[] func, ref string[,] stek)
         {
             int[] b = new int[stek.GetLength(0)];
@@ -108,10 +134,21 @@ namespace TKM_B_F_A
             return "0";
         }
 
+        /// <summary>
+        /// Подстановка значения в переменную
+        /// </summary>
+        /// <param name="f">функция</param>
+        /// <param name="v">переменная</param>
+        /// <param name="flag">значение переменной</param>
+        /// <returns>измененная функция</returns>
         static string[] Repl(string[] f, string v, bool flag)
         {
             string[] tech = new string[f.Length];
-            Array.Copy(f, tech, f.Length);
+            //System.Array.Copy(f, tech, f.Length);
+            for (int i = 0; i < f.Length; i++)
+            {
+                tech[i] = f[i];
+            }
             string n = "0";
             if (flag) { n = "1"; }
             for (int i = 0; i < f.Length; i++)
@@ -124,9 +161,13 @@ namespace TKM_B_F_A
             return tech;
         }
 
+        /// <summary>
+        /// Минимизация функции на основе алгебры Жегалкина
+        /// </summary>
+        /// <param name="f">функция для минимизации</param>
+        /// <returns>минимизированная функция</returns>
         static string[] MinF(string[] f)
         {
-            char[] tc = new char[1] { '1' };
             //замена х*0=0
             for (int k = 0; k < f.Length; k++)
             {
@@ -184,7 +225,6 @@ namespace TKM_B_F_A
             {
                 f = new string[1] { "0" };
             }
-
             for (int i = 0; i < f.Length; i++)
             {
                 if (f[i] == "1" && i != 0)
@@ -198,6 +238,11 @@ namespace TKM_B_F_A
             return f;
         }
 
+        /// <summary>
+        /// Преобразование функции в строку
+        /// </summary>
+        /// <param name="cn">функция для преобразования</param>
+        /// <returns></returns>
         static public string ParseToStr(string[] cn)
         {
             string wt = "";
@@ -208,6 +253,11 @@ namespace TKM_B_F_A
             return wt;
         }
 
+        /// <summary>
+        /// Создание матрицы смежности графа
+        /// </summary>
+        /// <param name="nodes">маасив узлов</param>
+        /// <returns>матрица смежности</returns>
         static public string[,] AdjMatrix(Node[] nodes)
         {
             string[,] matrix = new string[nodes.Length + 1, nodes.Length + 1];
@@ -220,27 +270,27 @@ namespace TKM_B_F_A
             }
             for (int i = 0; i < nodes.Length; i++)
             {
-                matrix[i + 1, 0] = ParseToStr(nodes[i].name);
+                matrix[i + 1, 0] = ParseToStr(nodes[i].Name);
 
             }
             for (int i = 0; i < nodes.Length; i++)
             {
-                matrix[0, i + 1] = ParseToStr(nodes[i].name);
+                matrix[0, i + 1] = ParseToStr(nodes[i].Name);
 
             }
             for (int i = 0; i < nodes.Length; i++)
             {
-                for (int j = 0; j < nodes[i].connections.GetLength(0); j++)
+                for (int j = 0; j < nodes[i].Connections.GetLength(0); j++)
                 {
                     for (int g = 1; g <= nodes.Length; g++)
                     {
-                        if (matrix[0, g] == ParseToStr(nodes[i].connections[j, 0]))
+                        if (matrix[0, g] == ParseToStr(nodes[i].Connections[j, 0]))
                         {
-                            matrix[i + 1, g] = ParseToStr(nodes[i].connections[j, 1]);
+                            matrix[i + 1, g] = ParseToStr(nodes[i].Connections[j, 1]);
                         }
-                        if (matrix[g, 0] == ParseToStr(nodes[i].connections[j, 0]))
+                        if (matrix[g, 0] == ParseToStr(nodes[i].Connections[j, 0]))
                         {
-                            matrix[g, i + 1] = ParseToStr(nodes[i].connections[j, 1]);
+                            matrix[g, i + 1] = ParseToStr(nodes[i].Connections[j, 1]);
                         }
                     }
                 }
@@ -248,4 +298,5 @@ namespace TKM_B_F_A
             return matrix;
         }
     }
+    #endregion
 }

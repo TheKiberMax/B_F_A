@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.IO;
 using System.Linq;
 
 namespace TKM_B_F_A
 {
-    class Program
+    class Decomp
     {
         static string[] names;
         static void Main(string[] args)
@@ -14,16 +13,14 @@ namespace TKM_B_F_A
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             names = new string[] { "x", "y", "z", "w" };
             Console.WriteLine("Input vector");
-            Console.WriteLine();
             string func = Console.ReadLine();
             int m = func.Length;
             int n = Convert.ToInt32(Math.Log(m, 2));
             Console.WriteLine();
             Console.WriteLine("Truth table");
-            Console.WriteLine();
+            Console.WriteLine("x y z w f");
             bool[,] vArr = VTable(func);
             OutputArray(vArr, m, n + 1);
-            // Console.ReadKey();
             Console.WriteLine();
             Console.WriteLine("Pascal's triangle");
             Console.WriteLine();
@@ -43,7 +40,6 @@ namespace TKM_B_F_A
                 }
             }
             Console.WriteLine();
-            Console.WriteLine();
             Console.WriteLine("Derivatives");
             string[,] stek = OrderVar(vArr, n);
             Console.WriteLine("Variables priority");
@@ -54,27 +50,46 @@ namespace TKM_B_F_A
             }
             Console.WriteLine();
             Console.WriteLine();
-            //Console.ReadKey();
             Shannon.Manager(pol, stek);
-            Node[] fff = Shannon.ns.Data;
+            Node[] nodes = Shannon.ns.Data;
+            for (int i = 0; i < nodes.Length - 1; i++)
+            {
+                Node ne = nodes[i + 1];
+                nodes[i + 1] = nodes[i];
+                nodes[i] = ne;
+            }
             Console.WriteLine("Values at nodes(in contact circuit)");
             Console.WriteLine();
-            for (int i = 0; i < fff.Length; i++)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                for (int j = 0; j < fff[i].name.Length; j++)
+                Console.Write((i + 1).ToString() + " - ");
+                for (int j = 0; j < nodes[i].Name.Length; j++)
                 {
-                    if (j == fff[i].name.Length - 1)
+                    if (j == nodes[i].Name.Length - 1)
                     {
-                        Console.Write(fff[i].name[j]);
+                        Console.Write(nodes[i].Name[j]);
                     }
                     else
                     {
-                        Console.Write(fff[i].name[j] + "+");
+                        Console.Write(nodes[i].Name[j] + "+");
                     }
                 }
                 Console.WriteLine();
             }
-            string[,] res = Shannon.AdjMatrix(fff);
+            string[,] res = Shannon.AdjMatrix(nodes);
+            //Приведение к треугольному виду
+            for (int i = 1; i < res.GetLength(0); i++)
+            {
+                res[0, i] = i.ToString();
+                res[i, 0] = i.ToString();
+                for (int j = 1; j < res.GetLength(1); j++)
+                {
+                    if (j < i)
+                    {
+                        res[i, j] = "0";
+                    }
+                }
+            }
             Console.WriteLine();
             Console.WriteLine("Adjacency matrix");
             Console.WriteLine();
@@ -83,14 +98,14 @@ namespace TKM_B_F_A
         }
 
         /// <summary>
-        /// Создание таблицы истинности
+        /// Создание таблицы истинности булевой функции
         /// </summary>
         /// <param name="func">булева функция в векторной форме</param>
-        /// <returns></returns>
+        /// <returns>таблица истинности</returns>
         static bool[,] VTable(string func)
         {
             int m = func.Length;
-            int n = Convert.ToInt32(Math.Log(m, 2) + 1);
+            int n = (int)(Math.Log(m, 2) + 1);
             bool[,] iArray = new bool[n, m];
             for (int i = 0; i < m; i++)
             {
@@ -109,7 +124,6 @@ namespace TKM_B_F_A
                         iArray[n - 1, i] = false;
                         break;
                 }
-
             }
             return iArray;
         }
@@ -126,11 +140,30 @@ namespace TKM_B_F_A
             {
                 for (int i = 0; i < n; i++)
                 {
-                    Console.Write(Convert.ToInt32(arr[i, j]) + " ");
+                    Console.Write(BooleanToInt(arr[i, j]) + " ");
                 }
                 Console.WriteLine();
             }
         }
+        
+        /// <summary>
+        /// Преобразование bool=>int(Это C#, не С++!!!)
+        /// </summary>
+        /// <param name="flag">bool values</param>
+        /// <returns>int values</returns>
+        static int BooleanToInt(bool flag)
+        {
+            if (flag)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// Вывод двумерного массива строк
+        /// </summary>
+        /// <param name="arr">массив</param>
         static void OutputArray(string[,] arr)
         {
             int m = 0; int n = 0;
@@ -151,18 +184,16 @@ namespace TKM_B_F_A
         /// </summary>
         /// <param name="vArr">таблица истинности функции</param>
         /// <param name="n">арность функции</param>
-        /// <returns></returns>
+        /// <returns>очередность использования переменных</returns>
         static string[,] OrderVar(bool[,] vArr, int n)
         {
-            //n++;
-            int m = Convert.ToInt32(Math.Pow(2, n));
+            int m = (int)(Math.Pow(2, n));
             //создаем массив значенией производных
             int[] p = new int[n];
             for (int arg = 0; arg < n; arg++)
             {
                 int l = 0; int l2 = m / 2;
                 bool[,] d = new bool[n + 1, m];
-
                 for (int i = 0; i < m; i++)
                 {
                     if (vArr[arg, i])
@@ -182,7 +213,6 @@ namespace TKM_B_F_A
                         l2++;
                     }
                 }
-
                 l2 = m / 2; l = 0;
                 for (int i = 0; i < m / 2; i++)
                 {
@@ -193,15 +223,13 @@ namespace TKM_B_F_A
                 }
                 Console.WriteLine();
                 Console.WriteLine("|" + names[arg] + "| = " + p[arg]);
-                Console.WriteLine();
             }
-
+            Console.WriteLine();
             string[,] res = new string[n, 2];
             int[] r = new int[n];
             for (int i = 0; i < n; i++)
             {
                 int v = -1; int k = 0;
-
                 for (int j = 0; j < n; j++)
                 {
                     if (v < p[j])
@@ -213,20 +241,18 @@ namespace TKM_B_F_A
                 res[i, 0] = names[k];
                 res[i, 1] = p[k].ToString();
                 p[k] = 0;
-
             }
             return res;
         }
 
         /// <summary>
-        /// Функция сборки полинома Жегалкина
+        /// Сборка полинома Жегалкина
         /// </summary>
         /// <param name="vArr">Таблица истинности функции</param>
         /// <param name="n">арность функции</param>
-        /// <returns></returns>
+        /// <returns>функция в виде полинома</returns>
         static string[] GegalkinPolynom(bool[,] vArr, int n)
         {
-
             int m = Convert.ToInt32(Math.Pow(2, n));
             int m1 = m;
             int m2 = m;
@@ -240,11 +266,9 @@ namespace TKM_B_F_A
                 for (int i = 0; i < m2 - 1; i++)
                 {
                     triangl[i, j + 1] = triangl[i, j] ^ triangl[i + 1, j];
-
                 }
                 m2--;
             }
-
             //вывод треугольника
             OutputArray(triangl, triangl.GetLength(1), triangl.GetLength(1));
             string[] polynom = new string[1];

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKM_B_F_A", "B.A.TKM\TKM_B_F_A.csproj", "{AA577264-27D0-4EF9-B089-8BF2F1F7CC5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKM_B_F_A", "TKM_B_F_A\TKM_B_F_A.csproj", "{AA577264-27D0-4EF9-B089-8BF2F1F7CC5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
