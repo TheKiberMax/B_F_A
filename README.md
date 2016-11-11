@@ -1,6 +1,13 @@
- # Boolean Function Analyzer.
+(
+ Boolean Function Analyzer.
  
- [Learn more](https://go.microsoft.com/fwlink/p/?LinkId=524306) about Markdown.
+ History
+  BFA_0.5 - Added repository to GitHub. Fixed bug in check node existence. Optimization Code.
+)
+||
+(
+  BFA - Анализатор Булевых функции.
  
- ##History
- BFA 
+ История
+  BFA_0.5 - Добавленн репозиторий на GitHub-е. Исправлена ошибка в проверки существования узла. Оптимизация кода
+ )
