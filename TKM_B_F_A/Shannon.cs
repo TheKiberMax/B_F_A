@@ -24,62 +24,50 @@
             {
                 //берем значение в текущем узле
                 f = ns.Data[i].Name;
-                //проверяем, что оно не одна переменная
-                if (f.Length == 1)
+                //получаем узлы потомки и их связи
+                index++;
+                string[,][] cn = Decomp(f, stek);
+                //проверяем, что первый(f0) не равен 0
+                for (int j = 0; j < 2; j++)
                 {
-                    //иначе пропускаем его
-                    continue;
-                }
-                else
-                {
-                    //получаем узлы потомки и их связи
-                    index++;
-                    string[,][] cn = Decomp(f, stek);
-                    //проверяем, что первый(f0) не равен 0
-                    for (int j = 0; j < 2; j++)
+                    if ((cn[j, 0][0] == "0"))
                     {
-                        if ((cn[j, 0][0] == "0"))
+                        continue;
+                    }
+                    else
+                    {
+                        //проверям, существует ли уже такой узел
+                        int k = (ns.SearchIndex(cn[j, 0]));
+                        //если существует
+                        if (k != -1)
                         {
-                            continue;
+                            //добавляем ему связь с родителем.
+                            ns.Data[k].Add(f, ParseToStr(cn[j, 1]));
+                            ns.Data[i].Add(cn[j, 0], ParseToStr(cn[j, 1]));
                         }
                         else
                         {
-                            //проверяем что это одна переменная
-                            if (cn[j, 0].Length == 1 && cn[j, 0][0] != "1")
-                            {
-                                //проверям, существует ли уже такой узел
-                                int l = (ns.SearchIndex(cn[j, 0]));
-                                //если не существует
-                                if (l == -1)
-                                {
-                                    //если это так то создаем узел связанный с конечным
-                                    string[] ed = new string[1];
-                                    ed[0] = "1";
-                                    Node ne = new Node(cn[j, 0], ed, ParseToStr(cn[j, 0]));
-                                    //добавляем в массив узлов
-                                    ns.Add(ne);
-                                    //добавляем связь конечному узлу
-                                    ns.Data[0].Add(cn[j, 0], ParseToStr(cn[j, 0]));
-                                }
-                            }
-                            //проверям, существует ли уже такой узел
-                            int k = (ns.SearchIndex(cn[j, 0]));
-                            //если существует
-                            if (k != -1)
-                            {
-                                //добавляем ему связь с родителем.
-                                ns.Data[k].Add(f, ParseToStr(cn[j, 1]));
-                            }
-                            else
-                            {
-                                //иначе создаем узел
-                                Node ne = new Node(cn[j, 0], f, ParseToStr(cn[j, 1]));
-                                //добавляем в массив узлов
-                                ns.Add(ne);
-                                //добавляем связь родителю
-                                ns.Data[i].Add(cn[j, 0], ParseToStr(cn[j, 1]));
-                            }
+                            //иначе создаем узел
+                            Node ne = new Node(cn[j, 0], f, ParseToStr(cn[j, 1]));
+                            //добавляем в массив узлов
+                            ns.Add(ne);
+                            //добавляем связь родителю
+                            ns.Data[i].Add(cn[j, 0], ParseToStr(cn[j, 1]));
                         }
+                    }
+                }
+            }
+            if (ns.Data.Length == 2)
+            {
+                if (ParseToStr(ns.Data[1].Name) == ParseToStr(ns.Data[0].Name))
+                {
+                    ns = new Nodes();
+                }
+                else
+                {
+                    if (ParseToStr(ns.Data[1].Name) == "0")
+                    {
+                        ns = null;
                     }
                 }
             }
@@ -278,24 +266,31 @@
                 matrix[0, i + 1] = ParseToStr(nodes[i].Name);
 
             }
-            for (int i = 0; i < nodes.Length; i++)
+            if (nodes.Length == 1)
             {
-                for (int j = 0; j < nodes[i].Connections.GetLength(0); j++)
+                return matrix;
+            }
+            else
+            {
+                for (int i = 0; i < nodes.Length; i++)
                 {
-                    for (int g = 1; g <= nodes.Length; g++)
+                    for (int j = 0; j < nodes[i].Connections.GetLength(0); j++)
                     {
-                        if (matrix[0, g] == ParseToStr(nodes[i].Connections[j, 0]))
+                        for (int g = 1; g <= nodes.Length; g++)
                         {
-                            matrix[i + 1, g] = ParseToStr(nodes[i].Connections[j, 1]);
-                        }
-                        if (matrix[g, 0] == ParseToStr(nodes[i].Connections[j, 0]))
-                        {
-                            matrix[g, i + 1] = ParseToStr(nodes[i].Connections[j, 1]);
+                            if (matrix[0, g] == ParseToStr(nodes[i].Connections[j, 0]))
+                            {
+                                matrix[i + 1, g] = ParseToStr(nodes[i].Connections[j, 1]);
+                            }
+                            if (matrix[g, 0] == ParseToStr(nodes[i].Connections[j, 0]))
+                            {
+                                matrix[g, i + 1] = ParseToStr(nodes[i].Connections[j, 1]);
+                            }
                         }
                     }
                 }
+                return matrix;
             }
-            return matrix;
         }
     }
     #endregion

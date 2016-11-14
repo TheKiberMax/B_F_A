@@ -21,6 +21,17 @@
             ne = new Node(func);
             Add(ne);
         }
+        /// <summary>
+        /// Конструктор на случай 1 ноды
+        /// </summary>
+        public Nodes()
+        {
+            string[] str = new string[1];
+            str[0] = "1";
+            Node ne = new Node(str);
+            Erase();
+            Add(ne);
+        }
         #endregion
 
         #region "=============== Properties =================="

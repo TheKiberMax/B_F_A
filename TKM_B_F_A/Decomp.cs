@@ -51,49 +51,61 @@ namespace TKM_B_F_A
             Console.WriteLine();
             Console.WriteLine();
             Shannon.Manager(pol, stek);
-            Node[] nodes = Shannon.ns.Data;
-            for (int i = 0; i < nodes.Length - 1; i++)
+            if (Shannon.ns == null)
             {
-                Node ne = nodes[i + 1];
-                nodes[i + 1] = nodes[i];
-                nodes[i] = ne;
+                Console.WriteLine("Values at nodes(in contact circuit)");
+                Console.WriteLine("-");
+                Console.WriteLine();
+                Console.WriteLine("Adjacency matrix");
+                Console.WriteLine("-");
+                Console.WriteLine("Zero Nods!");
             }
-            Console.WriteLine("Values at nodes(in contact circuit)");
-            Console.WriteLine();
-            for (int i = 0; i < nodes.Length; i++)
+            else
             {
-                Console.Write((i + 1).ToString() + " - ");
-                for (int j = 0; j < nodes[i].Name.Length; j++)
+                Node[] nodes = Shannon.ns.Data;
+                for (int i = 0; i < nodes.Length - 1; i++)
                 {
-                    if (j == nodes[i].Name.Length - 1)
+                    Node ne = nodes[i + 1];
+                    nodes[i + 1] = nodes[i];
+                    nodes[i] = ne;
+                }
+                Console.WriteLine("Values at nodes(in contact circuit)");
+                Console.WriteLine();
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    Console.Write((i + 1).ToString() + " - ");
+                    for (int j = 0; j < nodes[i].Name.Length; j++)
                     {
-                        Console.Write(nodes[i].Name[j]);
+                        if (j == nodes[i].Name.Length - 1)
+                        {
+                            Console.Write(nodes[i].Name[j]);
+                        }
+                        else
+                        {
+                            Console.Write(nodes[i].Name[j] + "+");
+                        }
                     }
-                    else
+                    Console.WriteLine();
+                }
+                string[,] res = Shannon.AdjMatrix(nodes);
+                //Приведение к треугольному виду
+                for (int i = 1; i < res.GetLength(0); i++)
+                {
+                    res[0, i] = i.ToString();
+                    res[i, 0] = i.ToString();
+                    for (int j = 1; j < res.GetLength(1); j++)
                     {
-                        Console.Write(nodes[i].Name[j] + "+");
+                        if (j < i)
+                        {
+                            res[i, j] = "0";
+                        }
                     }
                 }
                 Console.WriteLine();
+                Console.WriteLine("Adjacency matrix");
+                Console.WriteLine();
+                OutputArray(res);
             }
-            string[,] res = Shannon.AdjMatrix(nodes);
-            //Приведение к треугольному виду
-            for (int i = 1; i < res.GetLength(0); i++)
-            {
-                res[0, i] = i.ToString();
-                res[i, 0] = i.ToString();
-                for (int j = 1; j < res.GetLength(1); j++)
-                {
-                    if (j < i)
-                    {
-                        res[i, j] = "0";
-                    }
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine("Adjacency matrix");
-            Console.WriteLine();
-            OutputArray(res);
             Console.ReadKey();
         }
 
@@ -145,7 +157,7 @@ namespace TKM_B_F_A
                 Console.WriteLine();
             }
         }
-        
+
         /// <summary>
         /// Преобразование bool=>int(Это C#, не С++!!!)
         /// </summary>
@@ -271,7 +283,7 @@ namespace TKM_B_F_A
             }
             //вывод треугольника
             OutputArray(triangl, triangl.GetLength(1), triangl.GetLength(1));
-            string[] polynom = new string[1];
+            string[] polynom = new string[1] { "0" };
             bool flag = true;
             for (int i = 0; i < m; i++)
             {
