@@ -58,7 +58,7 @@
     <ManifestKeyFile>TKM_B_F_A_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -81,11 +81,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Node.cs" />
+    <Compile Include="BoolAnalyze\Derivatives.cs" />
+    <Compile Include="BoolAnalyze\Shannon\Node.cs" />
+    <Compile Include="BoolAnalyze\Zhegalkin.cs" />
+    <Compile Include="Ct.cs" />
     <Compile Include="Decomp.cs" />
+    <Compile Include="Output.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Nodes.cs" />
-    <Compile Include="Shannon.cs" />
+    <Compile Include="BoolAnalyze\Shannon\Nodes.cs" />
+    <Compile Include="BoolAnalyze\Shannon\Shannon.cs" />
+    <Compile Include="BoolAnalyze\TrueTables.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

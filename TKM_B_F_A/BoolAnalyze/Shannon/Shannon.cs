@@ -6,7 +6,6 @@
     static class Shannon
     {
         static public Nodes ns;
-        static public int index = 0;
 
         #region =============== Methods =====================
         /// <summary>
@@ -25,7 +24,6 @@
                 //берем значение в текущем узле
                 f = ns.Data[i].Name;
                 //получаем узлы потомки и их связи
-                index++;
                 string[,][] cn = Decomp(f, stek);
                 //проверяем, что первый(f0) не равен 0
                 for (int j = 0; j < 2; j++)

@@ -5,7 +5,7 @@
     /// </summary>
     class Nodes
     {
-        static private Node[] _nodes;
+        private Node[] _nodes;
 
         #region =============== Constructors ================
         /// <summary>
@@ -68,7 +68,7 @@
         /// <summary>
         /// Удаляет все узлы.
         /// </summary>
-        static public void Erase()
+        public void Erase()
         {
             _nodes = null;
         }
