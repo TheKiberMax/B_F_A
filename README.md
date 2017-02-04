@@ -6,7 +6,8 @@
 
    ###History
    
-	BFA_Console v0.6 - Added n-ary functions. Updated data input. Code refactoring. 
+    BFA_Console v0.7 - Global code update!
+    BFA_Console v0.6 - Added n-ary functions. Updated data input. Code refactoring. 
     BFA_Console v0.5.1 - Fixed bugs with empty graph.
     BFA_Console v0.5 - Added repository to GitHub. Fixed bug in check node existence. Optimization Code.
     BFA_Console v0.4 - Updated data output.
@@ -23,7 +24,8 @@
 
    ###История
 
-	BFA_Console v0.6 - Добавлены n-арные функции. Обновлен ввод данных. Рефакторинг кода.
+    BFA_Console v0.7 - Глобальное обновление кода.
+    BFA_Console v0.6 - Добавлены n-арные функции. Обновлен ввод данных. Рефакторинг кода.
     BFA_Console v0.5.1 - Исправлены ошибки с нуль-графом.
     BFA_Console v0.5 - Добавлен репозиторий на GitHub-е. Исправлена ошибка в проверки существования узла. Оптимизация кода.
     BFA_Console v0.4 - Обновлен вывод данных.
