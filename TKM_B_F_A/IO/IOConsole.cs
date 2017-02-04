@@ -16,10 +16,10 @@ namespace TKM.IO
         /// </summary>
         /// <param name="CursorVisible">видимость курсора. необязательный параметр</param>
         /// <param name="color">цвет консоли. необязательный параметр</param>
-        public IOConsole(bool CursorVisible = true, ConsoleColor color = ConsoleColor.DarkGreen)
+        public IOConsole()//bool CursorVisible = true, ConsoleColor color = ConsoleColor.DarkGreen)
         {
-            Console.CursorVisible = true;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            //Console.CursorVisible = true;
+            //Console.ForegroundColor = ConsoleColor.DarkGreen;
         }
         /// <summary>
         /// Переопределение метода интерфейса IIO. Получение входных данных

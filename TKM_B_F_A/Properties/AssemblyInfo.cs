@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("FaxEtNIX")]
 [assembly: AssemblyProduct("Boolean Function Analyzer")]
-[assembly: AssemblyCopyright("Copyright © 2016 Edel Maxim(TheKiberMax)")]
+[assembly: AssemblyCopyright("Copyright © 2017 Edel Maxim(TheKiberMax)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Можно задать все значения или принять номера сборки и редакции по умолчанию 
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.5")]
-[assembly: AssemblyFileVersion("0.5.0.0")]
+[assembly: AssemblyVersion("0.7")]
+[assembly: AssemblyFileVersion("0.7.2.0")]
