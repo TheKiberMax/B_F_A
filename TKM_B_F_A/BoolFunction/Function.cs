@@ -71,7 +71,6 @@ namespace TKM.BoolFunction
                         tech += func[i];
                     }
                 }
-                tech.ToCharArray();
                 _names = Array.ConvertAll(tech.ToCharArray(), MyConvert.CharToString);
                 Array.Sort(_names);
                 _table = new Analyze.TrueTable(func,_names).Table;
@@ -88,7 +87,7 @@ namespace TKM.BoolFunction
             if (MyConvert.IntToBool(lh) && ! MyConvert.IntToBool(lh & (lh - 1)))
             {
                 foreach (char c in data)
-                    if (c < 48 && c > 49)
+                    if (c < 48 || c > 49)
                     {
                         return false;
                     }

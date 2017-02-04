@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using TKM.BoolFunction;
 using TKM.Core;
 
