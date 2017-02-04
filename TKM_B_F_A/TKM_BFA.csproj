@@ -7,8 +7,8 @@
     <ProjectGuid>{AA577264-27D0-4EF9-B089-8BF2F1F7CC5D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TKM_B_F_A</RootNamespace>
-    <AssemblyName>TKM_B_F_A</AssemblyName>
+    <RootNamespace>TKM_BFA</RootNamespace>
+    <AssemblyName>TKM_BFA</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -40,7 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\TKM_B_F_A.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\TKM_BFA.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -81,16 +81,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoolAnalyze\Derivatives.cs" />
-    <Compile Include="BoolAnalyze\Shannon\Node.cs" />
-    <Compile Include="BoolAnalyze\Zhegalkin.cs" />
-    <Compile Include="Ct.cs" />
+    <Compile Include="BoolFunction\Analyzer.cs" />
+    <Compile Include="BoolFunction\Analyze\Derivatives.cs" />
+    <Compile Include="BoolFunction\Analyze\Shannon\Node.cs" />
+    <Compile Include="BoolFunction\Analyze\Zhegalkin.cs" />
+    <Compile Include="Core\MyConvert.cs" />
+    <Compile Include="Core\MyMath.cs" />
     <Compile Include="Decomp.cs" />
-    <Compile Include="Output.cs" />
+    <Compile Include="IO\IIO.cs" />
+    <Compile Include="IO\IOConsole.cs" />
+    <Compile Include="BoolFunction\Function.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BoolAnalyze\Shannon\Nodes.cs" />
-    <Compile Include="BoolAnalyze\Shannon\Shannon.cs" />
-    <Compile Include="BoolAnalyze\TrueTables.cs" />
+    <Compile Include="BoolFunction\Analyze\Shannon\Nodes.cs" />
+    <Compile Include="BoolFunction\Analyze\Shannon\Shannon.cs" />
+    <Compile Include="BoolFunction\Analyze\TrueTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -106,6 +110,7 @@
   <ItemGroup>
     <Content Include="main.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

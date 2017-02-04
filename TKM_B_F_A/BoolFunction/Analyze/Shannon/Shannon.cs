@@ -1,11 +1,94 @@
-﻿namespace TKM_B_F_A
+﻿using TKM.Core;
+namespace TKM.BoolFunction.Analyze
 {
     /// <summary>
     /// Реализация разложения Шеннона
     /// </summary>
-    static class Shannon
+    class Shannon
     {
-        static public Nodes ns;
+        #region =============== Fields ======================
+        /// <summary>
+        /// граф
+        /// </summary>
+        private Nodes _ns;
+        #endregion
+
+        #region =============== Constructors ================
+        /// <summary>
+        /// Конструктор класса реализующего разложения Шеннона
+        /// </summary>
+        /// <param name="func">функция в виде полинома Жегалкина</param>
+        /// <param name="stek">очередность переменных</param>
+        public Shannon(string[] func, string[] stek)
+        {
+            Manager(func, stek);
+        }
+        #endregion
+
+        #region =============== Properties ==================
+        /// <summary>
+        /// Значения фукции в узлах графа 
+        /// </summary>
+        public string[] ValueInNodes
+        {
+            get
+            {
+                if (_ns == null)
+                {
+                    return new string[] { "Zero Nods" };
+                }
+                else
+                {
+                    Node[] nodes = _ns.Data;
+                    for (int i = 0; i < nodes.Length - 1; i++)
+                    {
+                        Node ne = nodes[i + 1];
+                        nodes[i + 1] = nodes[i];
+                        nodes[i] = ne;
+                    }
+                    string[] res = new string[1];
+                    for (int i = 0; i < nodes.Length; i++)
+                    {
+                        if (i == 0)
+                        {
+                            res[i] = MyConvert.StringArrayToString(nodes[i].Name, "+");
+                        }
+                        else
+                        {
+                            string[] tech = new string[i + 1];
+                            res.CopyTo(tech, 0);
+                            tech[i] = MyConvert.StringArrayToString(nodes[i].Name, "+");
+                            res = tech;
+                        }
+                    }
+                    return res;
+                }
+            }
+        }
+        /// <summary>
+        /// Матрица смежности графа
+        /// </summary>
+        public string[,] AMatrix
+        {
+            get
+            {
+                if (_ns == null)
+                {
+                    return new string[1, 1] { { "Zero Nods!" } };
+                }
+                else
+                {
+                    string[,] res = AdjMatrix(_ns.Data);
+                    for (int i = 1; i < res.GetLength(0); i++)
+                    {
+                        res[0, i] = i.ToString();
+                        res[i, 0] = i.ToString();
+                    }
+                    return res;
+                }
+            }
+        }
+        #endregion
 
         #region =============== Methods =====================
         /// <summary>
@@ -13,16 +96,16 @@
         /// </summary>
         /// <param name="func">функция для разложения</param>
         /// <param name="stek">очередность использования переменных</param>
-        static public void Manager(string[] func, string[,] stek)
+        public void Manager(string[] func, string[] stek)
         {
             string[] f;
             // создаем граф
-            ns = new Nodes(func);
+            _ns = new Nodes(func);
             //начинаем идти вглубь
-            for (int i = 1; i < ns.Data.Length; i++)
+            for (int i = 1; i < _ns.Data.Length; i++)
             {
                 //берем значение в текущем узле
-                f = ns.Data[i].Name;
+                f = _ns.Data[i].Name;
                 //получаем узлы потомки и их связи
                 string[,][] cn = Decomp(f, stek);
                 //проверяем, что первый(f0) не равен 0
@@ -35,52 +118,51 @@
                     else
                     {
                         //проверям, существует ли уже такой узел
-                        int k = (ns.SearchIndex(cn[j, 0]));
+                        int k = (_ns.SearchIndex(cn[j, 0]));
                         //если существует
                         if (k != -1)
                         {
                             //добавляем ему связь с родителем.
-                            ns.Data[k].Add(f, ParseToStr(cn[j, 1]));
-                            ns.Data[i].Add(cn[j, 0], ParseToStr(cn[j, 1]));
+                            _ns.Data[k].Add(f, MyConvert.StringArrayToString(cn[j, 1],""));
+                            _ns.Data[i].Add(cn[j, 0], MyConvert.StringArrayToString(cn[j, 1],""));
                         }
                         else
                         {
                             //иначе создаем узел
-                            Node ne = new Node(cn[j, 0], f, ParseToStr(cn[j, 1]));
+                            Node ne = new Node(cn[j, 0], f, MyConvert.StringArrayToString(cn[j, 1],""));
                             //добавляем в массив узлов
-                            ns.Add(ne);
+                            _ns.Add(ne);
                             //добавляем связь родителю
-                            ns.Data[i].Add(cn[j, 0], ParseToStr(cn[j, 1]));
+                            _ns.Data[i].Add(cn[j, 0], MyConvert.StringArrayToString(cn[j, 1],""));
                         }
                     }
                 }
             }
-            if (ns.Data.Length == 2)
+            if (_ns.Data.Length == 2)
             {
-                if (ParseToStr(ns.Data[1].Name) == ParseToStr(ns.Data[0].Name))
+                if (MyConvert.StringArrayToString(_ns.Data[1].Name,"") == MyConvert.StringArrayToString(_ns.Data[0].Name,""))
                 {
-                    ns = new Nodes();
+                    _ns = new Nodes();
                 }
                 else
                 {
-                    if (ParseToStr(ns.Data[1].Name) == "0")
+                    if (MyConvert.StringArrayToString(_ns.Data[1].Name,"") == "0")
                     {
-                        ns = null;
+                        _ns = null;
                     }
                 }
             }
         }
-
         /// <summary>
         /// Разложение функции на две функции меньшей арности
         /// </summary>
         /// <param name="func">функция дл разложения</param>
         /// <param name="stek">очередность использования переменных</param>
         /// <returns>две функции меньшей арности с соответствующими значениями использованной переменной</returns>
-        static string[,][] Decomp(string[] func, string[,] stek)
+        private string[,][] Decomp(string[] func, string[] stek)
         {
             string[] f0; string[] f1; string v;
-            v = CurVar(func, ref stek);
+            v = CurValue(func, ref stek);
             //ставим 0 вместо переменной
             f0 = Repl(func, v, false);
             //минимизация результата
@@ -96,30 +178,28 @@
             res[1, 1] = new string[1] { v };
             return res;
         }
-
         /// <summary>
         /// Выбор переменной для текущего этапа разложения
         /// </summary>
         /// <param name="func">функция для разложения</param>
         /// <param name="stek">очередность использования переменных</param>
         /// <returns>переменная для текущего этапа разложения / "0" если дальнейшее разложение невозможно</returns>
-        static string CurVar(string[] func, ref string[,] stek)
+        private string CurValue(string[] func, ref string[] stek)
         {
             int[] b = new int[stek.GetLength(0)];
             for (int i = 0; i < stek.GetLength(0); i++)
             {
                 for (int j = 0; j < func.Length; j++)
                 {
-                    if (func[j].Contains(stek[i, 0]))
+                    if (func[j].Contains(stek[i]))
                     {
                         b[i]++;
-                        return stek[i, 0];
+                        return stek[i];
                     }
                 }
             }
             return "0";
         }
-
         /// <summary>
         /// Подстановка значения в переменную
         /// </summary>
@@ -127,7 +207,7 @@
         /// <param name="v">переменная</param>
         /// <param name="flag">значение переменной</param>
         /// <returns>измененная функция</returns>
-        static string[] Repl(string[] f, string v, bool flag)
+        private string[] Repl(string[] f, string v, bool flag)
         {
             string[] tech = new string[f.Length];
             //System.Array.Copy(f, tech, f.Length);
@@ -146,21 +226,17 @@
             }
             return tech;
         }
-
         /// <summary>
         /// Минимизация функции на основе алгебры Жегалкина
         /// </summary>
         /// <param name="f">функция для минимизации</param>
         /// <returns>минимизированная функция</returns>
-        static string[] MinF(string[] f)
+        private string[] MinF(string[] f)
         {
             //замена х*0=0
             for (int k = 0; k < f.Length; k++)
             {
-                if (f[k].Contains("-0"))
-                {
-                    f[k] = f[k].Replace("-0", "1");
-                }
+                f[k] = f[k].Replace("-0", "1");
                 if (f[k].Contains("0"))
                 {
                     f[k] = "0";
@@ -192,6 +268,7 @@
             {
                 if (f[i] == "0") { n++; }
             }
+
             if (f.Length - n != 0)
             {
                 string[] tech = new string[f.Length - n];
@@ -211,6 +288,7 @@
             {
                 f = new string[1] { "0" };
             }
+
             for (int i = 0; i < f.Length; i++)
             {
                 if (f[i] == "1" && i != 0)
@@ -223,28 +301,12 @@
             }
             return f;
         }
-
-        /// <summary>
-        /// Преобразование функции в строку
-        /// </summary>
-        /// <param name="cn">функция для преобразования</param>
-        /// <returns></returns>
-        static public string ParseToStr(string[] cn)
-        {
-            string wt = "";
-            for (int j = 0; j < cn.Length; j++)
-            {
-                wt += cn[j];
-            }
-            return wt;
-        }
-
         /// <summary>
         /// Создание матрицы смежности графа
         /// </summary>
         /// <param name="nodes">маасив узлов</param>
         /// <returns>матрица смежности</returns>
-        static public string[,] AdjMatrix(Node[] nodes)
+        private string[,] AdjMatrix(Node[] nodes)
         {
             string[,] matrix = new string[nodes.Length + 1, nodes.Length + 1];
             for (int i = 0; i < matrix.GetLength(0); i++)
@@ -256,14 +318,10 @@
             }
             for (int i = 0; i < nodes.Length; i++)
             {
-                matrix[i + 1, 0] = ParseToStr(nodes[i].Name);
-
+                matrix[i + 1, 0] = MyConvert.StringArrayToString(nodes[i].Name,"");
+                matrix[0, i + 1] = MyConvert.StringArrayToString(nodes[i].Name,"");
             }
-            for (int i = 0; i < nodes.Length; i++)
-            {
-                matrix[0, i + 1] = ParseToStr(nodes[i].Name);
 
-            }
             if (nodes.Length == 1)
             {
                 return matrix;
@@ -276,13 +334,13 @@
                     {
                         for (int g = 1; g <= nodes.Length; g++)
                         {
-                            if (matrix[0, g] == ParseToStr(nodes[i].Connections[j, 0]))
+                            if (matrix[0, g] == MyConvert.StringArrayToString(nodes[i].Connections[j, 0],""))
                             {
-                                matrix[i + 1, g] = ParseToStr(nodes[i].Connections[j, 1]);
+                                matrix[i + 1, g] = MyConvert.StringArrayToString(nodes[i].Connections[j, 1],"");
                             }
-                            if (matrix[g, 0] == ParseToStr(nodes[i].Connections[j, 0]))
+                            if (matrix[g, 0] == MyConvert.StringArrayToString(nodes[i].Connections[j, 0],""))
                             {
-                                matrix[g, i + 1] = ParseToStr(nodes[i].Connections[j, 1]);
+                                matrix[g, i + 1] = MyConvert.StringArrayToString(nodes[i].Connections[j, 1],"");
                             }
                         }
                     }

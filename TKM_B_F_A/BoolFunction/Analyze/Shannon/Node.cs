@@ -1,16 +1,24 @@
-﻿namespace TKM_B_F_A
+﻿namespace TKM.BoolFunction.Analyze
 {
     /// <summary>
     /// Класс узла графа
     /// </summary>
     class Node
     {
+        #region =============== Fields ======================
+        /// <summary>
+        /// Массив связей узла
+        /// </summary>
         private string[,][] _connections;
+        /// <summary>
+        /// Значение функции в узле
+        /// </summary>
         private string[] _name;
+        #endregion
 
         #region =============== Constructors ================
         /// <summary>
-        /// Конструктор(с добавлением связи)
+        /// Конструктор класса узла графа(с добавлением связи)
         /// </summary>
         /// <param name="ne">имя узла</param>
         /// <param name="cs">имя связанного узла</param>
@@ -20,9 +28,8 @@
             _name = ne;
             Add(cs, wt);
         }
-
         /// <summary>
-        /// Конструктор
+        /// Конструктор класса узла графа
         /// </summary>
         /// <param name="ne">имя узла</param>
         public Node(string[] ne)
@@ -31,21 +38,15 @@
         }
         #endregion
 
-        #region "=============== Properties =================="
+        #region =============== Properties ==================
         /// <summary>
         /// Возвращает массив связей узла. Только для чтения
         /// </summary>
-        public string[,][] Connections
-        {
-            get { return _connections; }
-        }
+        public string[,][] Connections => _connections;
         /// <summary>
         /// Возвращает функцию в узле. Только для чтения
         /// </summary>
-        public string[] Name
-        {
-            get { return _name; }
-        }
+        public string[] Name => _name;
         #endregion
 
         #region =============== Methods =====================
@@ -91,9 +92,8 @@
                 }
             }
         }
-
         /// <summary>
-        /// Функция поиска связи по значению функции в связанном узле
+        /// Метод поиска связи по значению функции в связанном узле
         /// </summary>
         /// <param name="cn">функция в связанном узле</param>
         /// <returns>true если связь существует</returns>

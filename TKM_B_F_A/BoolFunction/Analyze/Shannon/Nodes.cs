@@ -1,15 +1,20 @@
-﻿namespace TKM_B_F_A
+﻿namespace TKM.BoolFunction.Analyze
 {
     /// <summary>
     /// Класс графа
     /// </summary>
     class Nodes
     {
+        #region =============== Fields ======================
+        /// <summary>
+        /// Массив узлов графа
+        /// </summary>
         private Node[] _nodes;
+        #endregion
 
         #region =============== Constructors ================
         /// <summary>
-        /// Конструктор
+        /// Конструктор класса графа
         /// </summary>
         /// <param name="func">Исходная булевая функция</param>
         public Nodes(string[] func)
@@ -22,7 +27,7 @@
             Add(ne);
         }
         /// <summary>
-        /// Конструктор на случай 1 ноды
+        /// Конструктор класса графа для 1 ноды
         /// </summary>
         public Nodes()
         {
@@ -34,14 +39,11 @@
         }
         #endregion
 
-        #region "=============== Properties =================="
+        #region =============== Properties ==================
         /// <summary>
         /// Возвращает массив узлов. Только для чтения
         /// </summary>
-        public Node[] Data
-        {
-            get { return _nodes; }
-        }
+        public Node[] Data => _nodes;
         #endregion
 
         #region =============== Methods =====================
@@ -64,7 +66,6 @@
                 _nodes = tech;
             }
         }
-
         /// <summary>
         /// Удаляет все узлы.
         /// </summary>
@@ -72,44 +73,6 @@
         {
             _nodes = null;
         }
-
-        /// <summary>
-        /// Поиск узла по значению функции в узле
-        /// </summary>
-        /// <param name="cn">функция в узле</param>
-        /// <returns>true если узел существует</returns>
-        public bool Search(string[] cn)
-        {
-            if (_nodes == null || _nodes.Length == 0)
-            {
-                for (int i = 0; i < _nodes.GetLength(0); i++)
-                {
-                    if (_nodes[i].Name.Length == cn.Length)
-                    {
-                        bool f = false;
-                        for (int j = 0; j < cn.Length; j++)
-                        {
-                            if (_nodes[i].Name[j] != cn[j])
-                            {
-                                f = false;
-                                break;
-                            }
-                            else
-                            {
-                                f = true;
-                            }
-                        }
-                        if (f)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-            return false;
-        }
-
         /// <summary>
         /// Поиск узла по значению функции в узле
         /// </summary>

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("B_F_A")]
 [assembly: AssemblyDescription("Boolean Function Analyzer")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("TKM")]
+[assembly: AssemblyCompany("FaxEtNIX")]
 [assembly: AssemblyProduct("Boolean Function Analyzer")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2016 Edel Maxim(TheKiberMax)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
