@@ -22,6 +22,7 @@ namespace TKM_BFA
                         io = new TKM.IO.IOConsole();
                         break;
                 }
+
                 do
                 {
                     Function f = new Function(io.Get());

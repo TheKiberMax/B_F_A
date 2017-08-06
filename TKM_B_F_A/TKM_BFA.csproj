@@ -24,8 +24,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Boolean Function Analyzer</ProductName>
     <PublisherName>TKM</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.1.051116.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>0.7.051116.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -70,7 +70,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>main.ico</ApplicationIcon>
@@ -108,7 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\app.manifest" />
-    <None Include="TKM_B_F_A_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="main.ico" />
